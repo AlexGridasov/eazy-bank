@@ -1,10 +1,13 @@
 package com.gri.alex.accounts.service.impl;
 
 import com.gri.alex.accounts.constants.AccountConstants;
+import com.gri.alex.accounts.dto.AccountDto;
 import com.gri.alex.accounts.dto.CustomerDto;
 import com.gri.alex.accounts.entity.Account;
 import com.gri.alex.accounts.entity.Customer;
 import com.gri.alex.accounts.exception.CustomerAlreadyExistsException;
+import com.gri.alex.accounts.exception.ResourceNotFoundException;
+import com.gri.alex.accounts.mapper.AccountMapper;
 import com.gri.alex.accounts.mapper.CustomerMapper;
 import com.gri.alex.accounts.repository.AccountsRepository;
 import com.gri.alex.accounts.repository.CustomerRepository;
@@ -60,5 +63,26 @@ public class AccountServiceImpl implements IAccountService {
     newAccount.setCreatedBy("Anonymous");
 
     return newAccount;
+  }
+
+  /**
+   * @param mobileNumber - Input Mobile Number
+   * @return Accounts Details based on a given mobileNumber
+   */
+  @Override
+  public CustomerDto fetchAccount(String mobileNumber) {
+    Customer customer = customerRepository
+        .findByMobileNumber(mobileNumber)
+        .orElseThrow(() -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
+
+    Account account = accountsRepository
+        .findByCustomerId(customer.getCustomerId())
+        .orElseThrow(() -> new ResourceNotFoundException("Account", "customerId",
+            customer.getCustomerId().toString()));
+
+    CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
+    customerDto.setAccountDto(AccountMapper.mapToAccountDto(account, new AccountDto()));
+
+    return customerDto;
   }
 }
