@@ -22,6 +22,12 @@ Production ready Microservices with Spring, Spring Cloud, Docker and Kubernetes.
 * Cloud K8s cluster
 * K8s Ingress, Service Mesh (Istio) & mTLS
 
+# Internal Links
+H2 Console
+- http://localhost:8080/h2-console
+
+Swagger UI
+- http://localhost:8080/swagger-ui/index.html
 
 # Important Links
 - Spring Boot - https://spring.io/projects/spring-boot
