@@ -17,6 +17,7 @@
 
     <modules>
         <module>accounts</module>
+        <module>loans</module>
     </modules>
 
     <properties>
