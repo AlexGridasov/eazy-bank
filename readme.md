@@ -90,6 +90,13 @@ Swagger UI
 | `mvn spring-boot:build-image` | To generate a docker image using Buildpacks. No need of Dockerfile |
 | `mvn compile jib:dockerBuild` | To generate a docker image using Google Jib. No need of Dockerfile |
 
+## Google Jib Commands
+
+|     Google Jib Command       |     Description          |
+| ------------- | ------------- |
+| `mvn compile jib:dockerBuild` | To generate a docker image using Google Jib. No need of Dockerfile |
+| `mvn compile jib:build` | To generate a docker image and push it to a registry using Google Jib. No need of Dockerfile |
+
 ## Docker Commands
 
 |     Docker Command       |     Description          |
