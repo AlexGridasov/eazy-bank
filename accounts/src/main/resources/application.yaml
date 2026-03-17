@@ -14,6 +14,9 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  config:
+    import:
+      - "classpath:application_${spring.profiles.active}.yaml"
 
 build:
   version: "3.0"
