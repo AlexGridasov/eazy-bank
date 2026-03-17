@@ -1,6 +1,7 @@
 package com.gri.alex.accounts.controller;
 
 import com.gri.alex.accounts.constants.AccountConstants;
+import com.gri.alex.accounts.dto.AccountContactInfoDto;
 import com.gri.alex.accounts.dto.CustomerDto;
 import com.gri.alex.accounts.dto.ErrorResponseDto;
 import com.gri.alex.accounts.dto.ResponseDto;
@@ -38,17 +39,20 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class AccountsController {
 
+  private IAccountService iAccountsService;
+
+  public AccountsController(IAccountService iAccountsService) {
+    this.iAccountsService = iAccountsService;
+  }
+
   @Value("${build.version}")
   private String buildVersion;
 
   @Autowired
   private Environment environment;
 
-  private IAccountService iAccountsService;
-
-  public AccountsController(IAccountService iAccountsService) {
-    this.iAccountsService = iAccountsService;
-  }
+  @Autowired
+  private AccountContactInfoDto accountContactInfoDto;
 
   @Operation(
       summary = "Create Account REST API",
@@ -221,6 +225,30 @@ public class AccountsController {
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(environment.getProperty("JAVA_HOME"));
+  }
+
+  @Operation(
+      summary = "Get Contact Info",
+      description = "Contact Info details that can be reached out in case of any issues"
+  )
+  @ApiResponses({
+      @ApiResponse(
+          responseCode = "200",
+          description = "HTTP Status OK"
+      ),
+      @ApiResponse(
+          responseCode = "500",
+          description = "HTTP Status Internal Server Error",
+          content = @Content(
+              schema = @Schema(implementation = ErrorResponseDto.class)
+          )
+      )
+  })
+  @GetMapping("/contact-info")
+  public ResponseEntity<AccountContactInfoDto> getContactInfo() {
+    return ResponseEntity
+        .status(HttpStatus.OK)
+        .body(accountContactInfoDto);
   }
 
 }
