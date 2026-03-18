@@ -19,6 +19,7 @@
         <module>accounts</module>
         <module>loans</module>
         <module>cards</module>
+        <module>configserver</module>
     </modules>
 
     <properties>
