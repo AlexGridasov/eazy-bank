@@ -11,10 +11,10 @@ spring:
     config:
       server:
         native:
-          search-locations: "classpath:/config"
-#         search-locations: "file:///Users//eazybank//Documents//config"
+#          search-locations: "classpath:/config"
+          search-locations: "file:///d://dev//config"
 #        git:
-#          uri: "https://github.com/eazybytes/eazybytes-config.git"
+#          uri: "https://github.com/eazybank/eazybank-config.git"
 #          default-label: main
 #          timeout: 5
 #          clone-on-start: true
