@@ -9,10 +9,9 @@ import com.gri.alex.accounts.exception.CustomerAlreadyExistsException;
 import com.gri.alex.accounts.exception.ResourceNotFoundException;
 import com.gri.alex.accounts.mapper.AccountMapper;
 import com.gri.alex.accounts.mapper.CustomerMapper;
-import com.gri.alex.accounts.repository.AccountsRepository;
+import com.gri.alex.accounts.repository.AccountRepository;
 import com.gri.alex.accounts.repository.CustomerRepository;
-import com.gri.alex.accounts.service.IAccountService;
-import java.time.LocalDateTime;
+import com.gri.alex.accounts.service.AccountService;
 import java.util.Optional;
 import java.util.Random;
 import lombok.AllArgsConstructor;
@@ -20,9 +19,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class AccountServiceImpl implements IAccountService {
+public class AccountServiceImpl implements AccountService {
 
-  private AccountsRepository accountsRepository;
+  private AccountRepository accountRepository;
   private CustomerRepository customerRepository;
 
   /**
@@ -40,7 +39,7 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     Customer savedCustomer = customerRepository.save(customer);
-    accountsRepository.save(createNewAccount(savedCustomer));
+    accountRepository.save(createNewAccount(savedCustomer));
   }
 
   /**
@@ -69,7 +68,7 @@ public class AccountServiceImpl implements IAccountService {
         .findByMobileNumber(mobileNumber)
         .orElseThrow(() -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
 
-    Account account = accountsRepository
+    Account account = accountRepository
         .findByCustomerId(customer.getCustomerId())
         .orElseThrow(() -> new ResourceNotFoundException("Account", "customerId",
             customer.getCustomerId().toString()));
@@ -90,13 +89,13 @@ public class AccountServiceImpl implements IAccountService {
     AccountDto accountDto = customerDto.getAccountDto();
 
     if (accountDto != null) {
-      Account account = accountsRepository
+      Account account = accountRepository
           .findById(accountDto.getAccountNumber())
           .orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber",
               accountDto.getAccountNumber().toString()));
 
       AccountMapper.mapToAccount(accountDto, account);
-      account = accountsRepository.save(account);
+      account = accountRepository.save(account);
       Long customerId = account.getCustomerId();
 
       Customer customer = customerRepository
@@ -121,7 +120,7 @@ public class AccountServiceImpl implements IAccountService {
         .findByMobileNumber(mobileNumber)
         .orElseThrow(() -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
 
-    accountsRepository.deleteByCustomerId(customer.getCustomerId());
+    accountRepository.deleteByCustomerId(customer.getCustomerId());
     customerRepository.deleteById(customer.getCustomerId());
 
     return true;

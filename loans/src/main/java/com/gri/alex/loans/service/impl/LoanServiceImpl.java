@@ -1,13 +1,13 @@
 package com.gri.alex.loans.service.impl;
 
-import com.gri.alex.loans.constants.LoansConstants;
-import com.gri.alex.loans.dto.LoansDto;
-import com.gri.alex.loans.entity.Loans;
+import com.gri.alex.loans.constants.LoanConstants;
+import com.gri.alex.loans.dto.LoanDto;
+import com.gri.alex.loans.entity.Loan;
 import com.gri.alex.loans.exception.LoanAlreadyExistsException;
 import com.gri.alex.loans.exception.ResourceNotFoundException;
-import com.gri.alex.loans.mapper.LoansMapper;
-import com.gri.alex.loans.repository.LoansRepository;
-import com.gri.alex.loans.service.ILoansService;
+import com.gri.alex.loans.mapper.LoanMapper;
+import com.gri.alex.loans.repository.LoanRepository;
+import com.gri.alex.loans.service.LoanService;
 import java.util.Optional;
 import java.util.Random;
 import lombok.AllArgsConstructor;
@@ -15,67 +15,65 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class LoansServiceImpl implements ILoansService {
+public class LoanServiceImpl implements LoanService {
 
-  private LoansRepository loansRepository;
+  private LoanRepository loanRepository;
 
   /**
    * @param mobileNumber - Mobile Number of the Customer
    */
   @Override
   public void createLoan(String mobileNumber) {
-    Optional<Loans> optionalLoans = loansRepository.findByMobileNumber(mobileNumber);
+    Optional<Loan> optionalLoans = loanRepository.findByMobileNumber(mobileNumber);
     if (optionalLoans.isPresent()) {
       throw new LoanAlreadyExistsException(
           "Loan already registered with given mobileNumber " + mobileNumber);
     }
-    loansRepository.save(createNewLoan(mobileNumber));
+    loanRepository.save(createNewLoan(mobileNumber));
   }
 
   /**
    * @param mobileNumber - Mobile Number of the Customer
    * @return the new loan details
    */
-  private Loans createNewLoan(String mobileNumber) {
-    Loans newLoan = new Loans();
+  private Loan createNewLoan(String mobileNumber) {
+    Loan newLoan = new Loan();
     long randomLoanNumber = 100000000000L + new Random().nextInt(900000000);
     newLoan.setLoanNumber(Long.toString(randomLoanNumber));
     newLoan.setMobileNumber(mobileNumber);
-    newLoan.setLoanType(LoansConstants.HOME_LOAN);
-    newLoan.setTotalLoan(LoansConstants.NEW_LOAN_LIMIT);
+    newLoan.setLoanType(LoanConstants.HOME_LOAN);
+    newLoan.setTotalLoan(LoanConstants.NEW_LOAN_LIMIT);
     newLoan.setAmountPaid(0);
-    newLoan.setOutstandingAmount(LoansConstants.NEW_LOAN_LIMIT);
+    newLoan.setOutstandingAmount(LoanConstants.NEW_LOAN_LIMIT);
 
     return newLoan;
   }
 
   /**
-   *
    * @param mobileNumber - Input mobile Number
    * @return Loan Details based on a given mobileNumber
    */
   @Override
-  public LoansDto fetchLoan(String mobileNumber) {
-    Loans loans = loansRepository
+  public LoanDto fetchLoan(String mobileNumber) {
+    Loan loan = loanRepository
         .findByMobileNumber(mobileNumber)
         .orElseThrow(() -> new ResourceNotFoundException("Loan", "mobileNumber", mobileNumber));
 
-    return LoansMapper.mapToLoansDto(loans, new LoansDto());
+    return LoanMapper.mapToLoanDto(loan, new LoanDto());
   }
 
   /**
-   *
-   * @param loansDto - LoansDto Object
+   * @param loanDto - LoansDto Object
    * @return boolean indicating if the update of loan details is successful or not
    */
   @Override
-  public boolean updateLoan(LoansDto loansDto) {
-    Loans loans = loansRepository
-        .findByLoanNumber(loansDto.getLoanNumber())
+  public boolean updateLoan(LoanDto loanDto) {
+    Loan loan = loanRepository
+        .findByLoanNumber(loanDto.getLoanNumber())
         .orElseThrow(
-            () -> new ResourceNotFoundException("Loan", "LoanNumber", loansDto.getLoanNumber()));
-    LoansMapper.mapToLoans(loansDto, loans);
-    loansRepository.save(loans);
+            () -> new ResourceNotFoundException("Loan", "LoanNumber", loanDto.getLoanNumber()));
+    LoanMapper.mapToLoan(loanDto, loan);
+    loanRepository.save(loan);
 
     return true;
   }
@@ -86,11 +84,11 @@ public class LoansServiceImpl implements ILoansService {
    */
   @Override
   public boolean deleteLoan(String mobileNumber) {
-    Loans loans = loansRepository
+    Loan loan = loanRepository
         .findByMobileNumber(mobileNumber)
         .orElseThrow(() -> new ResourceNotFoundException("Loan", "mobileNumber", mobileNumber)
-    );
-    loansRepository.deleteById(loans.getLoanId());
+        );
+    loanRepository.deleteById(loan.getLoanId());
 
     return true;
   }

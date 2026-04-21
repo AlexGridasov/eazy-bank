@@ -1,11 +1,11 @@
 package com.gri.alex.loans.controller;
 
-import com.gri.alex.loans.constants.LoansConstants;
+import com.gri.alex.loans.constants.LoanConstants;
 import com.gri.alex.loans.dto.ErrorResponseDto;
-import com.gri.alex.loans.dto.LoansContactInfoDto;
-import com.gri.alex.loans.dto.LoansDto;
+import com.gri.alex.loans.dto.LoanContactInfoDto;
+import com.gri.alex.loans.dto.LoanDto;
 import com.gri.alex.loans.dto.ResponseDto;
-import com.gri.alex.loans.service.ILoansService;
+import com.gri.alex.loans.service.LoanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,12 +37,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
-public class LoansController {
+public class LoanController {
 
-  private ILoansService iLoansService;
+  private final LoanService loanService;
 
-  public LoansController(ILoansService iLoansService) {
-    this.iLoansService = iLoansService;
+  public LoanController(LoanService loanService) {
+    this.loanService = loanService;
   }
 
   @Value("${build.version}")
@@ -52,7 +52,7 @@ public class LoansController {
   private Environment environment;
 
   @Autowired
-  private LoansContactInfoDto loansContactInfoDto;
+  private LoanContactInfoDto loanContactInfoDto;
 
   @Operation(
       summary = "Create Loan REST API",
@@ -75,11 +75,11 @@ public class LoansController {
   public ResponseEntity<ResponseDto> createLoan(
       @RequestParam @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
       String mobileNumber) {
-    iLoansService.createLoan(mobileNumber);
+    loanService.createLoan(mobileNumber);
 
     return ResponseEntity
         .status(HttpStatus.CREATED)
-        .body(new ResponseDto(LoansConstants.STATUS_201, LoansConstants.MESSAGE_201));
+        .body(new ResponseDto(LoanConstants.STATUS_201, LoanConstants.MESSAGE_201));
   }
 
   @Operation(
@@ -100,12 +100,12 @@ public class LoansController {
       )
   })
   @GetMapping("/fetch")
-  public ResponseEntity<LoansDto> fetchLoanDetails(
+  public ResponseEntity<LoanDto> fetchLoanDetails(
       @RequestParam @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
       String mobileNumber) {
-    LoansDto loansDto = iLoansService.fetchLoan(mobileNumber);
+    LoanDto loanDto = loanService.fetchLoan(mobileNumber);
 
-    return ResponseEntity.status(HttpStatus.OK).body(loansDto);
+    return ResponseEntity.status(HttpStatus.OK).body(loanDto);
   }
 
   @Operation(
@@ -130,16 +130,16 @@ public class LoansController {
       )
   })
   @PutMapping("/update")
-  public ResponseEntity<ResponseDto> updateLoanDetails(@Valid @RequestBody LoansDto loansDto) {
-    boolean isUpdated = iLoansService.updateLoan(loansDto);
+  public ResponseEntity<ResponseDto> updateLoanDetails(@Valid @RequestBody LoanDto loanDto) {
+    boolean isUpdated = loanService.updateLoan(loanDto);
     if (isUpdated) {
       return ResponseEntity
           .status(HttpStatus.OK)
-          .body(new ResponseDto(LoansConstants.STATUS_200, LoansConstants.MESSAGE_200));
+          .body(new ResponseDto(LoanConstants.STATUS_200, LoanConstants.MESSAGE_200));
     } else {
       return ResponseEntity
           .status(HttpStatus.EXPECTATION_FAILED)
-          .body(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_417_UPDATE));
+          .body(new ResponseDto(LoanConstants.STATUS_417, LoanConstants.MESSAGE_417_UPDATE));
     }
   }
 
@@ -168,15 +168,15 @@ public class LoansController {
   public ResponseEntity<ResponseDto> deleteLoanDetails(
       @RequestParam @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
       String mobileNumber) {
-    boolean isDeleted = iLoansService.deleteLoan(mobileNumber);
+    boolean isDeleted = loanService.deleteLoan(mobileNumber);
     if (isDeleted) {
       return ResponseEntity
           .status(HttpStatus.OK)
-          .body(new ResponseDto(LoansConstants.STATUS_200, LoansConstants.MESSAGE_200));
+          .body(new ResponseDto(LoanConstants.STATUS_200, LoanConstants.MESSAGE_200));
     } else {
       return ResponseEntity
           .status(HttpStatus.EXPECTATION_FAILED)
-          .body(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_417_DELETE));
+          .body(new ResponseDto(LoanConstants.STATUS_417, LoanConstants.MESSAGE_417_DELETE));
     }
   }
 
@@ -246,9 +246,9 @@ public class LoansController {
       )
   })
   @GetMapping("/contact-info")
-  public ResponseEntity<LoansContactInfoDto> getContactInfo() {
+  public ResponseEntity<LoanContactInfoDto> getContactInfo() {
     return ResponseEntity
         .status(HttpStatus.OK)
-        .body(loansContactInfoDto);
+        .body(loanContactInfoDto);
   }
 }

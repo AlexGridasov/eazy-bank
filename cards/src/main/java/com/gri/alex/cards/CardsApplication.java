@@ -1,6 +1,6 @@
 package com.gri.alex.cards;
 
-import com.gri.alex.cards.dto.CardsContactInfoDto;
+import com.gri.alex.cards.dto.CardContactInfoDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditAwareImpl")
-@EnableConfigurationProperties(value = {CardsContactInfoDto.class})
+@EnableConfigurationProperties(value = {CardContactInfoDto.class})
 @OpenAPIDefinition(
     info = @Info(
         title = "Cards microservice REST API Documentation",

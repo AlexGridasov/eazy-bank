@@ -41,14 +41,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   public ResponseEntity<ErrorResponseDto> handleGlobalException(
       Exception exception, WebRequest webRequest) {
 
-    ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
+    ErrorResponseDto errorResponse = new ErrorResponseDto(
         webRequest.getDescription(false),
         HttpStatus.INTERNAL_SERVER_ERROR,
         exception.getMessage(),
         LocalDateTime.now()
     );
 
-    return new ResponseEntity<>(errorResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+    return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ExceptionHandler(ResourceNotFoundException.class)
@@ -56,14 +56,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       ResourceNotFoundException exception,
       WebRequest webRequest) {
 
-    ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
+    ErrorResponseDto errorResponse = new ErrorResponseDto(
         webRequest.getDescription(false),
         HttpStatus.NOT_FOUND,
         exception.getMessage(),
         LocalDateTime.now()
     );
 
-    return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(LoanAlreadyExistsException.class)
@@ -71,14 +71,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       LoanAlreadyExistsException exception,
       WebRequest webRequest) {
 
-    ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
+    ErrorResponseDto errorResponse = new ErrorResponseDto(
         webRequest.getDescription(false),
         HttpStatus.BAD_REQUEST,
         exception.getMessage(),
         LocalDateTime.now()
     );
 
-    return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
   }
 
 }

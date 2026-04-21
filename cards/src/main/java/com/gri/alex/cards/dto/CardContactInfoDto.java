@@ -1,18 +1,18 @@
-package com.gri.alex.loans.dto;
+package com.gri.alex.cards.dto;
 
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.List;
-import java.util.Map;
-
-@ConfigurationProperties(prefix = "loans")
+@ConfigurationProperties(prefix = "cards")
 @Getter
 @Setter
-public class LoansContactInfoDto {
+public class CardContactInfoDto {
 
   private String message;
   private Map<String, String> contactDetails;
   private List<String> onCallSupport;
 }
+

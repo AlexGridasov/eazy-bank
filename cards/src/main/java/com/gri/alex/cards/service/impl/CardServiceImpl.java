@@ -1,13 +1,13 @@
 package com.gri.alex.cards.service.impl;
 
-import com.gri.alex.cards.constants.CardsConstants;
-import com.gri.alex.cards.dto.CardsDto;
-import com.gri.alex.cards.entity.Cards;
+import com.gri.alex.cards.constants.CardConstants;
+import com.gri.alex.cards.dto.CardDto;
+import com.gri.alex.cards.entity.Card;
 import com.gri.alex.cards.exception.CardAlreadyExistsException;
 import com.gri.alex.cards.exception.ResourceNotFoundException;
-import com.gri.alex.cards.mapper.CardsMapper;
-import com.gri.alex.cards.repository.CardsRepository;
-import com.gri.alex.cards.service.ICardsService;
+import com.gri.alex.cards.mapper.CardMapper;
+import com.gri.alex.cards.repository.CardRepository;
+import com.gri.alex.cards.service.CardService;
 import java.util.Optional;
 import java.util.Random;
 import lombok.AllArgsConstructor;
@@ -15,63 +15,61 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class CardsServiceImpl implements ICardsService {
+public class CardServiceImpl implements CardService {
 
-  private CardsRepository cardsRepository;
+  private CardRepository cardRepository;
 
   /**
    * @param mobileNumber - Mobile Number of the Customer
    */
   @Override
   public void createCard(String mobileNumber) {
-    Optional<Cards> optionalCards = cardsRepository.findByMobileNumber(mobileNumber);
+    Optional<Card> optionalCards = cardRepository.findByMobileNumber(mobileNumber);
     if (optionalCards.isPresent()) {
       throw new CardAlreadyExistsException(
           "Card already registered with given mobileNumber " + mobileNumber);
     }
-    cardsRepository.save(createNewCard(mobileNumber));
+    cardRepository.save(createNewCard(mobileNumber));
   }
 
   /**
    * @param mobileNumber - Mobile Number of the Customer
    * @return the new card details
    */
-  private Cards createNewCard(String mobileNumber) {
-    Cards newCard = new Cards();
+  private Card createNewCard(String mobileNumber) {
+    Card newCard = new Card();
     long randomCardNumber = 100000000000L + new Random().nextInt(900000000);
     newCard.setCardNumber(Long.toString(randomCardNumber));
     newCard.setMobileNumber(mobileNumber);
-    newCard.setCardType(CardsConstants.CREDIT_CARD);
-    newCard.setTotalLimit(CardsConstants.NEW_CARD_LIMIT);
+    newCard.setCardType(CardConstants.CREDIT_CARD);
+    newCard.setTotalLimit(CardConstants.NEW_CARD_LIMIT);
     newCard.setAmountUsed(0);
-    newCard.setAvailableAmount(CardsConstants.NEW_CARD_LIMIT);
+    newCard.setAvailableAmount(CardConstants.NEW_CARD_LIMIT);
     return newCard;
   }
 
   /**
-   *
    * @param mobileNumber - Input mobile Number
    * @return Card Details based on a given mobileNumber
    */
   @Override
-  public CardsDto fetchCard(String mobileNumber) {
-    Cards cards = cardsRepository.findByMobileNumber(mobileNumber).orElseThrow(
+  public CardDto fetchCard(String mobileNumber) {
+    Card card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
         () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
     );
-    return CardsMapper.mapToCardsDto(cards, new CardsDto());
+    return CardMapper.mapToCardDto(card, new CardDto());
   }
 
   /**
-   *
-   * @param cardsDto - CardsDto Object
+   * @param cardDto - CardsDto Object
    * @return boolean indicating if the update of card details is successful or not
    */
   @Override
-  public boolean updateCard(CardsDto cardsDto) {
-    Cards cards = cardsRepository.findByCardNumber(cardsDto.getCardNumber()).orElseThrow(
-        () -> new ResourceNotFoundException("Card", "CardNumber", cardsDto.getCardNumber()));
-    CardsMapper.mapToCards(cardsDto, cards);
-    cardsRepository.save(cards);
+  public boolean updateCard(CardDto cardDto) {
+    Card card = cardRepository.findByCardNumber(cardDto.getCardNumber()).orElseThrow(
+        () -> new ResourceNotFoundException("Card", "CardNumber", cardDto.getCardNumber()));
+    CardMapper.mapToCard(cardDto, card);
+    cardRepository.save(card);
     return true;
   }
 
@@ -81,12 +79,11 @@ public class CardsServiceImpl implements ICardsService {
    */
   @Override
   public boolean deleteCard(String mobileNumber) {
-    Cards cards = cardsRepository.findByMobileNumber(mobileNumber).orElseThrow(
+    Card card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
         () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
     );
-    cardsRepository.deleteById(cards.getCardId());
+    cardRepository.deleteById(card.getCardId());
     return true;
   }
-
 
 }

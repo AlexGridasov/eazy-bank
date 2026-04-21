@@ -1,11 +1,11 @@
 package com.gri.alex.cards.controller;
 
-import com.gri.alex.cards.constants.CardsConstants;
-import com.gri.alex.cards.dto.CardsContactInfoDto;
-import com.gri.alex.cards.dto.CardsDto;
+import com.gri.alex.cards.constants.CardConstants;
+import com.gri.alex.cards.dto.CardContactInfoDto;
+import com.gri.alex.cards.dto.CardDto;
 import com.gri.alex.cards.dto.ErrorResponseDto;
 import com.gri.alex.cards.dto.ResponseDto;
-import com.gri.alex.cards.service.ICardsService;
+import com.gri.alex.cards.service.CardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,12 +37,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
-public class CardsController {
+public class CardController {
 
-  private ICardsService iCardsService;
+  private final CardService cardService;
 
-  public CardsController(ICardsService iCardsService) {
-    this.iCardsService = iCardsService;
+  public CardController(CardService cardService) {
+    this.cardService = cardService;
   }
 
   @Value("${build.version}")
@@ -52,7 +52,7 @@ public class CardsController {
   private Environment environment;
 
   @Autowired
-  private CardsContactInfoDto cardsContactInfoDto;
+  private CardContactInfoDto cardContactInfoDto;
 
   @Operation(
       summary = "Create Card REST API",
@@ -77,10 +77,10 @@ public class CardsController {
           regexp = "(^$|[0-9]{10})",
           message = "Mobile number must be 10 digits") String mobileNumber) {
 
-    iCardsService.createCard(mobileNumber);
+    cardService.createCard(mobileNumber);
     return ResponseEntity
         .status(HttpStatus.CREATED)
-        .body(new ResponseDto(CardsConstants.STATUS_201, CardsConstants.MESSAGE_201));
+        .body(new ResponseDto(CardConstants.STATUS_201, CardConstants.MESSAGE_201));
   }
 
   @Operation(
@@ -101,13 +101,13 @@ public class CardsController {
       )
   })
   @GetMapping("/fetch")
-  public ResponseEntity<CardsDto> fetchCardDetails(
+  public ResponseEntity<CardDto> fetchCardDetails(
       @RequestParam @Pattern(
           regexp = "(^$|[0-9]{10})",
           message = "Mobile number must be 10 digits") String mobileNumber) {
 
-    CardsDto cardsDto = iCardsService.fetchCard(mobileNumber);
-    return ResponseEntity.status(HttpStatus.OK).body(cardsDto);
+    CardDto cardDto = cardService.fetchCard(mobileNumber);
+    return ResponseEntity.status(HttpStatus.OK).body(cardDto);
   }
 
   @Operation(
@@ -132,16 +132,16 @@ public class CardsController {
       )
   })
   @PutMapping("/update")
-  public ResponseEntity<ResponseDto> updateCardDetails(@Valid @RequestBody CardsDto cardsDto) {
-    boolean isUpdated = iCardsService.updateCard(cardsDto);
+  public ResponseEntity<ResponseDto> updateCardDetails(@Valid @RequestBody CardDto cardDto) {
+    boolean isUpdated = cardService.updateCard(cardDto);
     if (isUpdated) {
       return ResponseEntity
           .status(HttpStatus.OK)
-          .body(new ResponseDto(CardsConstants.STATUS_200, CardsConstants.MESSAGE_200));
+          .body(new ResponseDto(CardConstants.STATUS_200, CardConstants.MESSAGE_200));
     } else {
       return ResponseEntity
           .status(HttpStatus.EXPECTATION_FAILED)
-          .body(new ResponseDto(CardsConstants.STATUS_417, CardsConstants.MESSAGE_417_UPDATE));
+          .body(new ResponseDto(CardConstants.STATUS_417, CardConstants.MESSAGE_417_UPDATE));
     }
   }
 
@@ -172,15 +172,15 @@ public class CardsController {
           regexp = "(^$|[0-9]{10})",
           message = "Mobile number must be 10 digits") String mobileNumber) {
 
-    boolean isDeleted = iCardsService.deleteCard(mobileNumber);
+    boolean isDeleted = cardService.deleteCard(mobileNumber);
     if (isDeleted) {
       return ResponseEntity
           .status(HttpStatus.OK)
-          .body(new ResponseDto(CardsConstants.STATUS_200, CardsConstants.MESSAGE_200));
+          .body(new ResponseDto(CardConstants.STATUS_200, CardConstants.MESSAGE_200));
     } else {
       return ResponseEntity
           .status(HttpStatus.EXPECTATION_FAILED)
-          .body(new ResponseDto(CardsConstants.STATUS_417, CardsConstants.MESSAGE_417_DELETE));
+          .body(new ResponseDto(CardConstants.STATUS_417, CardConstants.MESSAGE_417_DELETE));
     }
   }
 
@@ -250,10 +250,10 @@ public class CardsController {
       )
   })
   @GetMapping("/contact-info")
-  public ResponseEntity<CardsContactInfoDto> getContactInfo() {
+  public ResponseEntity<CardContactInfoDto> getContactInfo() {
     return ResponseEntity
         .status(HttpStatus.OK)
-        .body(cardsContactInfoDto);
+        .body(cardContactInfoDto);
   }
 
 }

@@ -1,31 +1,27 @@
 package com.gri.alex.loans.service;
 
-import com.gri.alex.loans.dto.LoansDto;
+import com.gri.alex.loans.dto.LoanDto;
 
-public interface ILoansService {
+public interface LoanService {
 
   /**
-   *
    * @param mobileNumber - Mobile Number of the Customer
    */
   void createLoan(String mobileNumber);
 
   /**
-   *
    * @param mobileNumber - Input mobile Number
    * @return Loan Details based on a given mobileNumber
    */
-  LoansDto fetchLoan(String mobileNumber);
+  LoanDto fetchLoan(String mobileNumber);
 
   /**
-   *
-   * @param loansDto - LoansDto Object
+   * @param loanDto - LoansDto Object
    * @return boolean indicating if the update of card details is successful or not
    */
-  boolean updateLoan(LoansDto loansDto);
+  boolean updateLoan(LoanDto loanDto);
 
   /**
-   *
    * @param mobileNumber - Input Mobile Number
    * @return boolean indicating if the delete of loan details is successful or not
    */

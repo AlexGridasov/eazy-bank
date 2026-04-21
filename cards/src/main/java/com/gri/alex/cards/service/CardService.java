@@ -1,31 +1,27 @@
 package com.gri.alex.cards.service;
 
-import com.gri.alex.cards.dto.CardsDto;
+import com.gri.alex.cards.dto.CardDto;
 
-public interface ICardsService {
+public interface CardService {
 
   /**
-   *
    * @param mobileNumber - Mobile Number of the Customer
    */
   void createCard(String mobileNumber);
 
   /**
-   *
    * @param mobileNumber - Input mobile Number
    * @return Card Details based on a given mobileNumber
    */
-  CardsDto fetchCard(String mobileNumber);
+  CardDto fetchCard(String mobileNumber);
 
   /**
-   *
-   * @param cardsDto - CardsDto Object
+   * @param cardDto - CardsDto Object
    * @return boolean indicating if the update of card details is successful or not
    */
-  boolean updateCard(CardsDto cardsDto);
+  boolean updateCard(CardDto cardDto);
 
   /**
-   *
    * @param mobileNumber - Input Mobile Number
    * @return boolean indicating if the delete of card details is successful or not
    */

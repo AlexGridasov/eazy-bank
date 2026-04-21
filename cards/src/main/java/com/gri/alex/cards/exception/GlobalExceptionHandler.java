@@ -39,14 +39,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponseDto> handleGlobalException(Exception exception,
                                                                 WebRequest webRequest) {
-    ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
+    ErrorResponseDto errorResponse = new ErrorResponseDto(
         webRequest.getDescription(false),
         HttpStatus.INTERNAL_SERVER_ERROR,
         exception.getMessage(),
         LocalDateTime.now()
     );
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(errorResponseDTO);
+        .body(errorResponse);
   }
 
   @ExceptionHandler(ResourceNotFoundException.class)
@@ -54,13 +54,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       ResourceNotFoundException exception,
       WebRequest webRequest) {
 
-    ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
+    ErrorResponseDto errorResponse = new ErrorResponseDto(
         webRequest.getDescription(false),
         HttpStatus.NOT_FOUND,
         exception.getMessage(),
         LocalDateTime.now()
     );
-    return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(CardAlreadyExistsException.class)
@@ -68,13 +68,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       CardAlreadyExistsException exception,
       WebRequest webRequest) {
 
-    ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
+    ErrorResponseDto errorResponse = new ErrorResponseDto(
         webRequest.getDescription(false),
         HttpStatus.BAD_REQUEST,
         exception.getMessage(),
         LocalDateTime.now()
     );
-    return new ResponseEntity<>(errorResponseDTO, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
   }
 
 }

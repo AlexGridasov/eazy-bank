@@ -1,6 +1,6 @@
-package com.gri.alex.accounts;
+package com.gri.alex.loans;
 
-import com.gri.alex.accounts.dto.AccountContactInfoDto;
+import com.gri.alex.loans.dto.LoanContactInfoDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -13,11 +13,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditAwareImpl")
-@EnableConfigurationProperties(value = {AccountContactInfoDto.class})
+@EnableConfigurationProperties(value = {LoanContactInfoDto.class})
 @OpenAPIDefinition(
     info = @Info(
-        title = "Accounts microservice REST API Documentation",
-        description = "EazyBank Accounts microservice REST API Documentation",
+        title = "Loans microservice REST API Documentation",
+        description = "EazyBank Loans microservice REST API Documentation",
         version = "v1",
         contact = @Contact(
             name = "Mr. Bean",
@@ -30,13 +30,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
         )
     ),
     externalDocs = @ExternalDocumentation(
-        description =  "EazyBank Accounts microservice REST API Documentation",
+        description = "EazyBank Loans microservice REST API Documentation",
         url = "https://www.eazybank.com/swagger-ui.html"
     )
 )
-public class AccountsApplication {
+public class LoanApplication {
 
   static void main(String[] args) {
-    SpringApplication.run(AccountsApplication.class, args);
+    SpringApplication.run(LoanApplication.class, args);
   }
 }

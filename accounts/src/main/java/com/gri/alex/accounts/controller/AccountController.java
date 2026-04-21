@@ -5,7 +5,7 @@ import com.gri.alex.accounts.dto.AccountContactInfoDto;
 import com.gri.alex.accounts.dto.CustomerDto;
 import com.gri.alex.accounts.dto.ErrorResponseDto;
 import com.gri.alex.accounts.dto.ResponseDto;
-import com.gri.alex.accounts.service.IAccountService;
+import com.gri.alex.accounts.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,12 +37,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
-public class AccountsController {
+public class AccountController {
 
-  private IAccountService iAccountsService;
+  private final AccountService accountService;
 
-  public AccountsController(IAccountService iAccountsService) {
-    this.iAccountsService = iAccountsService;
+  public AccountController(AccountService accountService) {
+    this.accountService = accountService;
   }
 
   @Value("${build.version}")
@@ -73,7 +73,7 @@ public class AccountsController {
   })
   @PostMapping("/create")
   public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
-    iAccountsService.createAccount(customerDto);
+    accountService.createAccount(customerDto);
 
     return ResponseEntity
         .status(HttpStatus.CREATED)
@@ -101,7 +101,7 @@ public class AccountsController {
   public ResponseEntity<CustomerDto> fetchAccountDetails(
       @RequestParam @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
       String mobileNumber) {
-    CustomerDto customerDto = iAccountsService.fetchAccount(mobileNumber);
+    CustomerDto customerDto = accountService.fetchAccount(mobileNumber);
 
     return ResponseEntity.status(HttpStatus.OK).body(customerDto);
   }
@@ -130,7 +130,7 @@ public class AccountsController {
   @PutMapping("/update")
   public ResponseEntity<ResponseDto> updateAccountDetails(
       @Valid @RequestBody CustomerDto customerDto) {
-    boolean isUpdated = iAccountsService.updateAccount(customerDto);
+    boolean isUpdated = accountService.updateAccount(customerDto);
     if (isUpdated) {
       return ResponseEntity
           .status(HttpStatus.OK)
@@ -167,7 +167,7 @@ public class AccountsController {
   public ResponseEntity<ResponseDto> deleteAccountDetails(
       @RequestParam @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
       String mobileNumber) {
-    boolean isDeleted = iAccountsService.deleteAccount(mobileNumber);
+    boolean isDeleted = accountService.deleteAccount(mobileNumber);
     if (isDeleted) {
       return ResponseEntity
           .status(HttpStatus.OK)
