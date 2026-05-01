@@ -68,6 +68,10 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
+                    <from>
+                        <!-- Use custom local image with curl for health check -->
+                        <image>docker://25-jre-alpine-curl:1.0</image>
+                    </from>
                     <to>
                         <image>eazybank/${project.artifactId}:s6</image>
                     </to>

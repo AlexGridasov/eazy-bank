@@ -101,6 +101,7 @@ Swagger UI
 
 |     Docker Command       |     Description          |
 | ------------- | ------------- |
+| `docker build -t 25-jre-alpine-curl:1.0 .` | To generate a docker image with curl (run in eazybank-ms/) |
 | `docker build . -t eazybank/accounts:s4` | To generate a docker image based on a Dockerfile |
 | `docker run  -p 8080:8080 eazybank/accounts:s4` | To start a docker container based on a given image |
 | `docker images` | To list all the docker images present in the Docker server |

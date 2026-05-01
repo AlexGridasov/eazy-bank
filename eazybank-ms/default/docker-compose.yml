@@ -12,6 +12,9 @@ services:
       timeout: 5s
       retries: 10
       start_period: 5s
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     extends:
       file: common-config.yml
       service: network-deploy-service
@@ -26,10 +29,12 @@ services:
         condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 3s
       timeout: 5s
       retries: 10
-      start_period: 10s
+      start_period: 5s
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
     extends:
       file: common-config.yml
       service: microservice-base-config

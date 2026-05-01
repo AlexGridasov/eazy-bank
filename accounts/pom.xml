@@ -139,7 +139,7 @@
                 <version>3.5.1</version>
                 <configuration>
                     <to>
-                        <image>eazybank/${project.artifactId}:s4</image>
+                        <image>eazybank/${project.artifactId}:s6</image>
                     </to>
                 </configuration>
             </plugin>
