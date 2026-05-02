@@ -1,24 +1,4 @@
 services:
-  rabbitmq:
-    image: rabbitmq:4-management
-    container_name: rabbitmq
-    hostname: rabbitmq
-    ports:
-      - "5672:5672"   # AMQP protocol
-      - "15672:15672" # Management UI
-    healthcheck:
-      test: rabbitmq-diagnostics check_port_connectivity
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 5s
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-    extends:
-      file: common-config.yml
-      service: network-deploy-service
-
   configserver:
     image: "eazybank/configserver:s6"
     container_name: configserver-ms
@@ -33,8 +13,6 @@ services:
       timeout: 5s
       retries: 10
       start_period: 5s
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
     extends:
       file: common-config.yml
       service: microservice-base-config
