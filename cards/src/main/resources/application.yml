@@ -44,6 +44,6 @@ eureka:
 
 info:
   app:
-    name: "accounts"
-    description: "Eazy Bank Accounts Application"
+    name: "cards"
+    description: "Eazy Bank Cards Application"
     version: "1.0.0"
