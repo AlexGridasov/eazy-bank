@@ -1,5 +1,6 @@
 package com.gri.alex.accounts.mapper;
 
+import com.gri.alex.accounts.dto.CustomerDetailsDto;
 import com.gri.alex.accounts.dto.CustomerDto;
 import com.gri.alex.accounts.entity.Customer;
 
@@ -19,4 +20,11 @@ public class CustomerMapper {
     return customer;
   }
 
+  public static CustomerDetailsDto mapToCustomerDetailsDto(Customer customer,
+                                                           CustomerDetailsDto customerDetailsDto) {
+    customerDetailsDto.setName(customer.getName());
+    customerDetailsDto.setEmail(customer.getEmail());
+    customerDetailsDto.setMobileNumber(customer.getMobileNumber());
+    return customerDetailsDto;
+  }
 }
